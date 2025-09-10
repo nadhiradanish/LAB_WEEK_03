@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController  // <- tambahkan ini
+import androidx.navigation.fragment.findNavController
 
 class ListFragment : Fragment() {
 
@@ -24,18 +24,21 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // tambahkan 5 view kopi (pastikan id-nya ada di fragment_list.xml)
         val coffeeList = listOf<View>(
             view.findViewById(R.id.affogato),
             view.findViewById(R.id.americano),
-            view.findViewById(R.id.latte)
+            view.findViewById(R.id.latte),
+            view.findViewById(R.id.espresso),      // item baru
+            view.findViewById(R.id.cappuccino)     // item baru
         )
 
         coffeeList.forEach { coffee ->
             coffee.setOnClickListener {
-                val fragmentBundle = Bundle()
-                fragmentBundle.putInt(COFFEE_ID, coffee.id)
+                val fragmentBundle = Bundle().apply {
+                    putInt(COFFEE_ID, coffee.id)
+                }
 
-                // sekarang sudah bisa
                 findNavController().navigate(
                     R.id.coffee_id_action,
                     fragmentBundle

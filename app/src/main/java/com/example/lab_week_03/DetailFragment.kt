@@ -4,16 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import androidx.navigation.fragment.findNavController
 
 class DetailFragment : Fragment() {
-
-    private var param1: String? = null
-    private var param2: String? = null
 
     // ambil TextView dari layout setelah view sudah ter-inflate
     private val coffeeTitle: TextView?
@@ -24,10 +20,6 @@ class DetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -38,14 +30,23 @@ class DetailFragment : Fragment() {
         // Inflate layout fragment_detail.xml
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Tombol back yang kita tambahkan di fragment_detail.xml
+        val btnBack: Button = view.findViewById(R.id.btnBack)
+        btnBack.setOnClickListener {
+            // kembali ke ListFragment secara manual
+            findNavController().navigateUp()
+        }
+
         val coffeeId = arguments?.getInt(COFFEE_ID, 0) ?: 0
         setCoffeeData(coffeeId)
     }
 
     /** fungsi untuk mengisi data ke TextView */
-    fun setCoffeeData(id: Int) {
+    private fun setCoffeeData(id: Int) {
         when (id) {
             R.id.affogato -> {
                 coffeeTitle?.text = getString(R.string.affogato_title)
@@ -61,11 +62,21 @@ class DetailFragment : Fragment() {
                 coffeeTitle?.text = getString(R.string.latte_title)
                 coffeeDesc?.text = getString(R.string.latte_desc)
             }
+
+            // contoh kopi tambahan
+            R.id.espresso -> {
+                coffeeTitle?.text = getString(R.string.espresso_title)
+                coffeeDesc?.text = getString(R.string.espresso_desc)
+            }
+            R.id.cappuccino -> {
+                coffeeTitle?.text = getString(R.string.cappuccino_title)
+                coffeeDesc?.text = getString(R.string.cappuccino_desc)
+            }
         }
     }
 
     companion object {
-        private const val COFFEE_ID = "COFFEE_ID"
+        const val COFFEE_ID = "COFFEE_ID"
         fun newInstance(coffeeId: Int) =
             DetailFragment().apply {
                 arguments = Bundle().apply {
